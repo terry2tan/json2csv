@@ -1,0 +1,114 @@
+<html>
+<head>
+    <title>Covnert JSON to CSV</title>
+	<meta charset="utf8">
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<script src=" http://libs.baidu.com/json/json2/json2.js"></script>	
+	<style>
+		button {
+		 width: 50px;
+		 height: 20px;
+		margin-left: 1%;
+		}
+		
+		#txtJSON {
+			height: 40%;
+			width: 98%;
+			margin: 1% 1% 1% 1%;
+			border-color: #ccc;
+			background-color:#f8f8f8;
+			line-height:150%
+		}
+		
+		.display{
+			margin: 1% 1% 1% 1%;
+		}
+		
+		#csv {
+			border: 1px #ccc solid;
+			background-color:#f8f8f8;
+			line-height:150%
+		}
+		
+		pre{
+			height: 40%;
+			white-space:pre-wrap;
+			white-space:-moz-pre-wrap;
+			white-space:-pre-wrap;
+			white-space:-o-pre-wrap;
+			word-wrap:break-word;
+			overflow:auto;
+		}
+	</style>
+</head>
+<body>
+
+<!------输入框------->
+<div>
+	<textarea class="form-control" id="txtJSON" placeholder="粘贴Json文本到这里"></textarea>
+</div>
+
+<!------按钮1------->
+<div>
+	<button id="convert" type="button" class="btn btn-sm" > 转换 </button>
+</div>
+
+<!------结果框------->
+<div class="display">
+    <!--<h3>JSON</h3>
+    <pre id="json"></pre>
+    <h3>CSV</h3>-->
+    <pre id="csv"></pre>
+</div>
+
+<!------按钮2------->
+<div>
+	<a id="download" download="json.csv" href="#" onclick="downloader(this)">
+		<button  type="button" class="btn btn-sm" > 下载 </button>
+	</a>
+</div>
+
+</body>
+<script type="text/javascript">
+// JSON to CSV Converter
+function ConvertToCSV(objArray) {
+
+	var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+	var str = '';
+
+	for (var i = 0; i < array.length; i++) {
+		var line = '';
+		for (var index in array[i]) {
+			if (line != '') line += ','
+			line += '"'+array[i][index]+'"';
+		}
+		str += line + '\r\n';
+	}
+	return str;
+}
+
+//生成下载文件	
+function downloader(aLink){
+         var str = $('#csv').text();;
+         str =  encodeURIComponent(str);
+         aLink.href = "data:text/csv;charset=utf-8,\ufeff"+str;
+    };
+
+//按钮点击
+$("button#convert").click(function(){
+
+		// Create Object
+		var items = $('#txtJSON').val();
+		
+		 // Convert Object to JSON
+		//var jsonObject = JSON.stringify(items);
+	  
+		// Display JSON
+		//$('#json').text(jsonObject);
+
+		// Convert JSON to CSV & Display CSV
+		$('#csv').text(ConvertToCSV(items));
+	});
+		
+</script>
+</html>
